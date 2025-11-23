@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Química Geral</title>
+    <style>
+        /* --- ESTILOS GERAIS --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* --- CABEÇALHO --- */
+        header { background-color: #0056b3; color: white; padding: 2rem; text-align: center; border-bottom: 4px solid #003d6b; }
+        header h1 { font-family: Arial, Helvetica, sans-serif; font-style: italic; font-weight: 900; font-size: 2.5rem; margin-bottom: 0.5rem; letter-spacing: 1px; text-transform: uppercase; }
+        
+        /* --- MENU --- */
+        nav { background-color: #004494; padding: 0; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        nav a { 
+            display: inline-block; 
+            padding: 1rem 1.5rem; 
+            color: white; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 1rem; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            border-bottom: 4px solid transparent; 
+        }
+        nav a:hover { background-color: #003370; color: #ffcc00; }
+        nav a.ativo { border-bottom: 4px solid #ffcc00; background-color: #00387a; }
+
+        /* --- LAYOUT --- */
+        .container { display: flex; flex: 1; max-width: 1200px; margin: 30px auto; width: 100%; gap: 20px; padding: 0 15px; }
+        .anuncio-lateral { width: 200px; background-color: #e9ecef; border: 1px solid #ced4da; display: flex; align-items: center; justify-content: center; color: #adb5bd; font-weight: bold; text-align: center; flex-shrink: 0; font-size: 0.9rem; }
+        
+        main { flex-grow: 1; background-color: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); min-height: 500px; }
+
+        /* --- PÁGINAS VIRTUAIS --- */
+        .pagina { display: none; animation: fadeIn 0.5s; }
+        .pagina.visivel { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- ELEMENTOS VISUAIS --- */
+        h2 { border-left: 5px solid #0056b3; padding-left: 15px; margin-bottom: 20px; color: #333; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 6px; font-size: 1rem; transition: 0.3s; background: #fff; }
+        .input-group input:focus, .input-group select:focus { border-color: #0056b3; outline: none; }
+        .row { display: flex; gap: 20px; }
+        .col { flex: 1; }
+
+        /* --- BOTÕES --- */
+        button.btn-calcular { width: 100%; padding: 15px; background-color: #0056b3; color: white; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px;}
+        button.btn-calcular:hover { background-color: #004494; transform: translateY(-2px); }
+        button.btn-secundario { background-color: #6c757d; }
+        button.btn-secundario:hover { background-color: #5a6268; }
+        
+        /* --- EXTRAS --- */
+        .resultado-box { margin-top: 20px; padding: 20px; background-color: #d1e7dd; color: #0f5132; border-radius: 6px; text-align: center; display: none; border: 1px solid #badbcc; }
+        .legenda-container { display: flex; gap: 10px; background-color: #fff3cd; border: 1px solid #ffecb5; padding: 15px; border-radius: 8px; margin-bottom: 25px; flex-wrap: wrap; justify-content: center; }
+        .legenda-item { margin: 0 10px; font-size: 0.9rem; color: #856404; }
+        .legenda-item strong { font-size: 1.2rem; font-family: 'Times New Roman', Times, serif; margin-right: 5px; }
+        
+        /* Box de Conversão */
+        .converter-box { background-color: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; margin-bottom: 30px; }
+        .converter-title { font-size: 1.2rem; font-weight: bold; color: #0056b3; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+
+        /* --- ÁREA DO PIX --- */
+        .pix-container {
+            background-color: #f0f9ff;
+            border: 2px dashed #0056b3;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .pix-img {
+            max-width: 180px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .btn-pix {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
+        .btn-pix:hover { background-color: #218838; transform: scale(1.05); }
+        .autor-nota {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 5px solid #ffc107;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        footer { background-color: #212529; color: #aaa; text-align: center; padding: 2rem; margin-top: auto; }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .anuncio-lateral { width: 100%; height: 100px; order: -1; }
+            .row { flex-direction: column; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>CALCULADORA QUÍMICA</h1>
+        <p>Ferramentas para cálculos químicos e gerais</p>
+    </header>
+
+    <nav>
+        <a id="btn-molaridade" onclick="navegar('molaridade')">Molaridade</a>
+        <a id="btn-diluicao" onclick="navegar('diluicao')">Diluição</a>
+        <a id="btn-conversor" onclick="navegar('conversor')">Conversor</a>
+        <a id="btn-sobre" onclick="navegar('sobre')">Sobre</a>
+    </nav>
+
+    <div class="container">
+        <aside class="anuncio-lateral">ESPAÇO PUBLICITÁRIO<br>(Google Ads)</aside>
+
+        <main>
+            
+            <!-- === PÁGINA 1: MOLARIDADE === -->
+            <div id="pag-molaridade" class="pagina">
+                <h2>Cálculo de Molaridade Geral</h2>
+                <p style="margin-bottom: 15px; color: #666;">Utilize esta aba para cálculos envolvendo concentração molar, massa e volume.</p>
+
+                <div class="legenda-container">
+                    <div class="legenda-item"><strong>M</strong> = Molaridade</div>
+                    <div class="legenda-item"><strong>m</strong> = Massa (g)</div>
+                    <div class="legenda-item"><strong>MM</strong> = Massa Molar</div>
+                    <div class="legenda-item"><strong>V</strong> = Volume</div>
+                </div>
+
+                <div class="input-group" style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
+                    <label style="color: #0056b3;">O que você quer descobrir?</label>
+                    <select id="tipoCalculo" onchange="atualizarCamposMolaridade()">
+                        <option value="acharMolaridade">Quero descobrir a MOLARIDADE (M)</option>
+                        <option value="acharMassa">Quero descobrir a MASSA (m)</option>
+                        <option value="acharVolume">Quero descobrir o VOLUME (V)</option>
+                        <option value="acharMM">Quero descobrir a MASSA MOLAR (MM)</option>
+                    </select>
+                </div>
+
+                <div class="input-group" id="campo_M" style="display:none;">
+                    <label>Molaridade (M) mol/L:</label>
+                    <input type="number" id="flex_M" placeholder="Ex: 0.5">
+                </div>
+                <div class="input-group" id="campo_MM">
+                    <label>Massa Molar (MM) g/mol:</label>
+                    <input type="number" id="flex_MM" placeholder="Ex: 58.44">
+                </div>
+                <div class="input-group" id="campo_Volume">
+                    <label>Volume da Solução (ml):</label>
+                    <input type="number" id="flex_V" placeholder="Ex: 500">
+                </div>
+                <div class="input-group" id="campo_Massa">
+                    <label>Massa do Soluto (g):</label>
+                    <input type="number" id="flex_m" placeholder="Ex: 25">
+                </div>
+
+                <button class="btn-calcular" onclick="calcUniversal()">CALCULAR AGORA</button>
+                <div id="resMolaridade" class="resultado-box"></div>
+            </div>
+
+            <!-- === PÁGINA 2: DILUIÇÃO === -->
+            <div id="pag-diluicao" class="pagina">
+                <h2>Cálculo de Diluição</h2>
+                <p style="margin-bottom: 15px; color: #666;">
+                    Fórmula base: <strong>C₁ . V₁ = C₂ . V₂</strong>. <br>Deixe vazio o campo que você deseja descobrir.
+                </p>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group" style="background: #eef4fa; padding:10px; border-radius:5px;">
+                            <label style="color:#004494">SOLUÇÃO INICIAL (1)</label>
+                            <label style="font-size: 0.8rem;">Concentração (C1):</label>
+                            <input type="number" id="d_c1" placeholder="Ex: 10 mol/L">
+                            <label style="font-size: 0.8rem; margin-top:10px;">Volume (V1):</label>
+                            <input type="number" id="d_v1" placeholder="Ex: 50 ml">
+                        </div>
+                    </div>
+                    <div class="col" style="display:flex; align-items:center; justify-content:center; font-weight:bold; color:#ccc; font-size:2rem;">➜</div>
+                    <div class="col">
+                        <div class="input-group" style="background: #eef4fa; padding:10px; border-radius:5px;">
+                            <label style="color:#004494">SOLUÇÃO FINAL (2)</label>
+                            <label style="font-size: 0.8rem;">Concentração (C2):</label>
+                            <input type="number" id="d_c2" placeholder="Ex: 2 mol/L">
+                            <label style="font-size: 0.8rem; margin-top:10px;">Volume (V2):</label>
+                            <input type="number" id="d_v2" placeholder="???">
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-calcular btn-secundario" onclick="calcDiluicao()">CALCULAR DILUIÇÃO</button>
+                <div id="resDiluicao" class="resultado-box" style="background-color: #cff4fc; color: #055160; border-color: #b6effb;"></div>
+            </div>
+
+            <!-- === PÁGINA 3: CONVERSOR === -->
+            <div id="pag-conversor" class="pagina">
+                <h2>Conversor de Unidades</h2>
+                <p style="margin-bottom: 20px;">Digite um valor em qualquer campo para converter automaticamente.</p>
+                
+                <!-- TEMPERATURA -->
+                <div class="converter-box">
+                    <div class="converter-title">🌡️ Temperatura</div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Celsius (°C)</label>
+                                <input type="number" id="conv_C" oninput="converterTemp('C')" placeholder="0">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Kelvin (K)</label>
+                                <input type="number" id="conv_K" oninput="converterTemp('K')" placeholder="273.15">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Fahrenheit (°F)</label>
+                                <input type="number" id="conv_F" oninput="converterTemp('F')" placeholder="32">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRESSÃO -->
+                <div class="converter-box">
+                    <div class="converter-title">💨 Pressão</div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Atmosfera (atm)</label>
+                                <input type="number" id="conv_atm" oninput="converterPressao('atm')" placeholder="1">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>mmHg / Torr</label>
+                                <input type="number" id="conv_mmhg" oninput="converterPressao('mmhg')" placeholder="760">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Pascal (Pa)</label>
+                                <input type="number" id="conv_pa" oninput="converterPressao('pa')" placeholder="101325">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VOLUME -->
+                <div class="converter-box">
+                    <div class="converter-title">🧪 Volume</div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Litros (L)</label>
+                                <input type="number" id="conv_l" oninput="converterVolume('l')" placeholder="1">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Mililitros (ml)</label>
+                                <input type="number" id="conv_ml" oninput="converterVolume('ml')" placeholder="1000">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Metro Cúbico (m³)</label>
+                                <input type="number" id="conv_m3" oninput="converterVolume('m3')" placeholder="0.001">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MASSA -->
+                <div class="converter-box">
+                    <div class="converter-title">⚖️ Massa</div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Quilogramas (kg)</label>
+                                <input type="number" id="conv_kg" oninput="converterMassa('kg')" placeholder="1">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Gramas (g)</label>
+                                <input type="number" id="conv_g" oninput="converterMassa('g')" placeholder="1000">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Miligramas (mg)</label>
+                                <input type="number" id="conv_mg" oninput="converterMassa('mg')" placeholder="1000000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENERGIA -->
+                <div class="converter-box">
+                    <div class="converter-title">⚡ Energia (Termoquímica)</div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Joules (J)</label>
+                                <input type="number" id="conv_j" oninput="converterEnergia('j')" placeholder="4.18">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Calorias (cal)</label>
+                                <input type="number" id="conv_cal" oninput="converterEnergia('cal')" placeholder="1">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label>Quilocalorias (kcal)</label>
+                                <input type="number" id="conv_kcal" oninput="converterEnergia('kcal')" placeholder="0.001">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- === PÁGINA 4: SOBRE & APOIO === -->
+            <div id="pag-sobre" class="pagina">
+                <h2>Sobre o Projeto</h2>
+                
+                <!-- Nota do Autor -->
+                <div class="autor-nota">
+                    <p><strong>Olá! 👋 Esta é a minha primeira criação.</strong></p>
+                    <p>Sou estudante de <strong>Química Industrial (2º Período)</strong> e desenvolvi este site para me ajudar nos estudos e facilitar a vida de outros colegas, técnicos e professores.</p>
+                    <p>Meu objetivo é democratizar o conhecimento e oferecer ferramentas rápidas e precisas, seguindo sempre os padrões da IUPAC.</p>
+                </div>
+                
+                <p>O site é 100% gratuito e sempre será. Porém, se esta ferramenta foi útil para você e quiser contribuir com qualquer valor para ajudar a manter o projeto no ar (e pagar meu café durante as madrugadas de estudo), ficarei muito grato!</p>
+
+                <!-- Área do PIX -->
+                <div class="pix-container">
+                    <h3 style="color: #0056b3;">☕ Apoie o Desenvolvedor</h3>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #555;">Escaneie o QR Code abaixo com o app do seu banco:</p>
+                    
+                    <!-- QR Code Gerado Automaticamente -->
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020101021126580014br.gov.bcb.pix0136918d20ee-def0-4986-b1c3-a8fb0165697d5204000053039865802BR5919SAMUEL C DOS SANTOS6008SAO LUIS62070503***630497DE" alt="QR Code Pix" class="pix-img">
+                    <br>
+                    
+                    <p style="margin-bottom: 10px; font-size: 0.9rem;">Ou copie a chave Pix (Copia e Cola):</p>
+                    
+                    <!-- Botão de Copiar -->
+                    <button class="btn-pix" onclick="copiarPix()">
+                        <span>📋</span> COPIAR CHAVE PIX
+                    </button>
+                    <p id="msg-copiado" style="display:none; color: green; margin-top: 10px; font-weight: bold;">✅ Código copiado com sucesso!</p>
+                </div>
+            </div>
+
+        </main>
+        <aside class="anuncio-lateral">ESPAÇO PUBLICITÁRIO<br>(Google Ads)</aside>
+    </div>
+
+    <footer>
+        <p>© 2025 Calculadora Química - Ferramentas para Laboratório</p>
+    </footer>
+
+    <script>
+        // --- NAVEGAÇÃO ---
+        function navegar(aba) {
+            document.querySelectorAll('.pagina').forEach(p => p.classList.remove('visivel'));
+            document.querySelectorAll('nav a').forEach(b => b.classList.remove('ativo'));
+            document.getElementById('pag-' + aba).classList.add('visivel');
+            document.getElementById('btn-' + aba).classList.add('ativo');
+        }
+        navegar('molaridade'); // Inicio
+
+        // --- FUNÇÃO DE COPIAR PIX (ATUALIZADA E ROBUSTA) ---
+        function copiarPix() {
+            const pixCode = "00020101021126580014br.gov.bcb.pix0136918d20ee-def0-4986-b1c3-a8fb0165697d5204000053039865802BR5919SAMUEL C DOS SANTOS6008SAO LUIS62070503***630497DE";
+            
+            function mostrarSucesso() {
+                let msg = document.getElementById('msg-copiado');
+                msg.style.display = 'block';
+                setTimeout(() => { msg.style.display = 'none'; }, 3000);
+            }
+
+            // Método 1: Tenta execCommand (Funciona em iframes/bloqueados)
+            try {
+                const textArea = document.createElement("textarea");
+                textArea.value = pixCode;
+                
+                // Esconde o elemento visualmente mas mantém no DOM
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "0";
+                
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                if (successful) {
+                    mostrarSucesso();
+                    return;
+                }
+            } catch (err) {
+                console.error("Erro no método execCommand:", err);
+            }
+
+            // Método 2: Tenta API Clipboard (Moderna, mas pode falhar em iframe)
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(pixCode).then(mostrarSucesso).catch(err => {
+                    console.error('Erro na API Clipboard: ', err);
+                    prompt("Copie o código manualmente:", pixCode);
+                });
+            } else {
+                prompt("Copie o código manualmente:", pixCode);
+            }
+        }
+
+        // --- CONVERSORES ---
+        function converterTemp(origem) {
+            let c = document.getElementById('conv_C');
+            let k = document.getElementById('conv_K');
+            let f = document.getElementById('conv_F');
+            let val = parseFloat(origem === 'C' ? c.value : origem === 'K' ? k.value : f.value);
+            if(isNaN(val)) { c.value=''; k.value=''; f.value=''; return; }
+
+            if (origem === 'C') {
+                k.value = (val + 273.15).toFixed(2);
+                f.value = ((val * 9/5) + 32).toFixed(2);
+            } else if (origem === 'K') {
+                c.value = (val - 273.15).toFixed(2);
+                f.value = ((val - 273.15) * 9/5 + 32).toFixed(2);
+            } else if (origem === 'F') {
+                c.value = ((val - 32) * 5/9).toFixed(2);
+                k.value = (((val - 32) * 5/9) + 273.15).toFixed(2);
+            }
+        }
+
+        function converterPressao(origem) {
+            let atm = document.getElementById('conv_atm');
+            let mmhg = document.getElementById('conv_mmhg');
+            let pa = document.getElementById('conv_pa');
+            let val = parseFloat(origem === 'atm' ? atm.value : origem === 'mmhg' ? mmhg.value : pa.value);
+            if(isNaN(val)) { atm.value=''; mmhg.value=''; pa.value=''; return; }
+
+            if (origem === 'atm') {
+                mmhg.value = (val * 760).toFixed(2);
+                pa.value = (val * 101325).toFixed(1);
+            } else if (origem === 'mmhg') {
+                atm.value = (val / 760).toFixed(4);
+                pa.value = ((val / 760) * 101325).toFixed(1);
+            } else if (origem === 'pa') {
+                atm.value = (val / 101325).toFixed(6);
+                mmhg.value = ((val / 101325) * 760).toFixed(2);
+            }
+        }
+
+        // Novos Conversores
+        function converterVolume(origem) {
+            let l = document.getElementById('conv_l');
+            let ml = document.getElementById('conv_ml');
+            let m3 = document.getElementById('conv_m3');
+            let val = parseFloat(origem === 'l' ? l.value : origem === 'ml' ? ml.value : m3.value);
+            if(isNaN(val)) { l.value=''; ml.value=''; m3.value=''; return; }
+
+            if (origem === 'l') {
+                ml.value = (val * 1000).toFixed(2);
+                m3.value = (val / 1000).toFixed(6);
+            } else if (origem === 'ml') {
+                l.value = (val / 1000).toFixed(4);
+                m3.value = (val / 1000000).toFixed(8);
+            } else if (origem === 'm3') {
+                l.value = (val * 1000).toFixed(2);
+                ml.value = (val * 1000000).toFixed(2);
+            }
+        }
+
+        function converterMassa(origem) {
+            let kg = document.getElementById('conv_kg');
+            let g = document.getElementById('conv_g');
+            let mg = document.getElementById('conv_mg');
+            let val = parseFloat(origem === 'kg' ? kg.value : origem === 'g' ? g.value : mg.value);
+            if(isNaN(val)) { kg.value=''; g.value=''; mg.value=''; return; }
+
+            if (origem === 'kg') {
+                g.value = (val * 1000).toFixed(2);
+                mg.value = (val * 1000000).toFixed(2);
+            } else if (origem === 'g') {
+                kg.value = (val / 1000).toFixed(4);
+                mg.value = (val * 1000).toFixed(2);
+            } else if (origem === 'mg') {
+                kg.value = (val / 1000000).toFixed(8);
+                g.value = (val / 1000).toFixed(4);
+            }
+        }
+
+        function converterEnergia(origem) {
+            let j = document.getElementById('conv_j');
+            let cal = document.getElementById('conv_cal');
+            let kcal = document.getElementById('conv_kcal');
+            let val = parseFloat(origem === 'j' ? j.value : origem === 'cal' ? cal.value : kcal.value);
+            if(isNaN(val)) { j.value=''; cal.value=''; kcal.value=''; return; }
+
+            // 1 cal = 4.184 J
+            if (origem === 'j') {
+                cal.value = (val / 4.184).toFixed(4);
+                kcal.value = (val / 4184).toFixed(6);
+            } else if (origem === 'cal') {
+                j.value = (val * 4.184).toFixed(2);
+                kcal.value = (val / 1000).toFixed(4);
+            } else if (origem === 'kcal') {
+                j.value = (val * 4184).toFixed(2);
+                cal.value = (val * 1000).toFixed(2);
+            }
+        }
+
+        // --- MOLARIDADE ---
+        function atualizarCamposMolaridade() {
+            let tipo = document.getElementById('tipoCalculo').value;
+            ['campo_M', 'campo_MM', 'campo_Volume', 'campo_Massa'].forEach(id => document.getElementById(id).style.display = 'none');
+            
+            if (tipo === 'acharMolaridade') {
+                ['campo_Massa', 'campo_MM', 'campo_Volume'].forEach(id => document.getElementById(id).style.display = 'block');
+            } else if (tipo === 'acharMassa') {
+                ['campo_M', 'campo_MM', 'campo_Volume'].forEach(id => document.getElementById(id).style.display = 'block');
+            } else if (tipo === 'acharVolume') {
+                ['campo_M', 'campo_MM', 'campo_Massa'].forEach(id => document.getElementById(id).style.display = 'block');
+            } else if (tipo === 'acharMM') {
+                ['campo_M', 'campo_Massa', 'campo_Volume'].forEach(id => document.getElementById(id).style.display = 'block');
+            }
+            document.getElementById('resMolaridade').style.display = 'none';
+        }
+
+        function calcUniversal() {
+            let tipo = document.getElementById('tipoCalculo').value;
+            let M = parseFloat(document.getElementById('flex_M').value);
+            let m = parseFloat(document.getElementById('flex_m').value);
+            let MM = parseFloat(document.getElementById('flex_MM').value);
+            let V = parseFloat(document.getElementById('flex_V').value);
+            let resDiv = document.getElementById('resMolaridade');
+            let res = 0; let unid = "";
+
+            if (tipo === 'acharMolaridade') {
+                if(isNaN(m) || isNaN(MM) || isNaN(V)) return alert("Preencha os campos!");
+                res = m / (MM * (V/1000)); unid = "mol/L";
+            } else if (tipo === 'acharMassa') {
+                if(isNaN(M) || isNaN(MM) || isNaN(V)) return alert("Preencha os campos!");
+                res = M * MM * (V/1000); unid = "g";
+            } else if (tipo === 'acharVolume') {
+                if(isNaN(M) || isNaN(MM) || isNaN(m)) return alert("Preencha os campos!");
+                res = (m / (M * MM)) * 1000; unid = "ml";
+            } else if (tipo === 'acharMM') {
+                if(isNaN(M) || isNaN(m) || isNaN(V)) return alert("Preencha os campos!");
+                res = m / (M * (V/1000)); unid = "g/mol";
+            }
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = "Resultado: <br><strong style='font-size:1.5rem'>" + res.toFixed(4) + " " + unid + "</strong>";
+        }
+
+        // --- DILUIÇÃO ---
+        function calcDiluicao() {
+            let c1 = parseFloat(document.getElementById('d_c1').value);
+            let v1 = parseFloat(document.getElementById('d_v1').value);
+            let c2 = parseFloat(document.getElementById('d_c2').value);
+            let v2 = parseFloat(document.getElementById('d_v2').value);
+            let resDiv = document.getElementById('resDiluicao');
+            let res = 0; let txt = "";
+
+            if (!document.getElementById('d_c1').value) {
+                res = (c2 * v2) / v1; txt = "Concentração Inicial (C1)";
+            } else if (!document.getElementById('d_v1').value) {
+                res = (c2 * v2) / c1; txt = "Volume Inicial (V1)";
+            } else if (!document.getElementById('d_c2').value) {
+                res = (c1 * v1) / v2; txt = "Concentração Final (C2)";
+            } else if (!document.getElementById('d_v2').value) {
+                res = (c1 * v1) / c2; txt = "Volume Final (V2)";
+            } else { return alert("Deixe UM campo vazio para descobrir!"); }
+            
+            if(isNaN(res) || !isFinite(res)) return alert("Erro nos valores.");
+            resDiv.style.display = 'block';
+            resDiv.innerHTML = txt + ": <br><strong style='font-size:1.5rem'>" + res.toFixed(2) + "</strong>";
+        }
+        
+        atualizarCamposMolaridade();
+    </script>
+</body>
+</html>
