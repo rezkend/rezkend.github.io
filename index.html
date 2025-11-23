@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Química Geral</title>
+    
+    <!-- ========================================================================== -->
+    <!-- ÁREA DO GOOGLE ADSENSE (SCRIPT GLOBAL)                                     -->
+    <!-- 1. Quando o Google te der o código "Auto Ads", cole ele logo abaixo.       -->
+    <!-- 2. Geralmente começa com <script async src=... e termina com </script>     -->
+    <!-- ========================================================================== -->
+    
+    <!-- COLE O CÓDIGO DO GOOGLE AQUI -->
+
     <style>
         /* --- ESTILOS GERAIS --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,7 +40,22 @@
 
         /* --- LAYOUT --- */
         .container { display: flex; flex: 1; max-width: 1200px; margin: 30px auto; width: 100%; gap: 20px; padding: 0 15px; }
-        .anuncio-lateral { width: 200px; background-color: #e9ecef; border: 1px solid #ced4da; display: flex; align-items: center; justify-content: center; color: #adb5bd; font-weight: bold; text-align: center; flex-shrink: 0; font-size: 0.9rem; }
+        
+        /* Estilo da caixa de anúncio (pode remover a borda depois que colocar o anúncio real) */
+        .anuncio-lateral { 
+            width: 200px; 
+            background-color: #e9ecef; 
+            border: 1px dashed #ced4da; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #adb5bd; 
+            font-weight: bold; 
+            text-align: center; 
+            flex-shrink: 0; 
+            font-size: 0.9rem;
+            overflow: hidden; /* Garante que o anúncio não vaze */
+        }
         
         main { flex-grow: 1; background-color: white; padding: 2.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); min-height: 500px; }
 
@@ -65,35 +89,7 @@
         .converter-box { background-color: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; margin-bottom: 30px; }
         .converter-title { font-size: 1.2rem; font-weight: bold; color: #0056b3; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
 
-        /* --- ÁREA DO PIX --- */
-        .pix-container {
-            background-color: #f0f9ff;
-            border: 2px dashed #0056b3;
-            border-radius: 10px;
-            padding: 25px;
-            text-align: center;
-            margin-top: 30px;
-        }
-        .pix-img {
-            max-width: 180px;
-            margin: 15px 0;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-        .btn-pix {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: 0.3s;
-        }
-        .btn-pix:hover { background-color: #218838; transform: scale(1.05); }
+        /* --- NOTA DO AUTOR --- */
         .autor-nota {
             background-color: #fff3cd;
             padding: 15px;
@@ -126,7 +122,14 @@
     </nav>
 
     <div class="container">
-        <aside class="anuncio-lateral">ESPAÇO PUBLICITÁRIO<br>(Google Ads)</aside>
+        
+        <!-- ======================================================= -->
+        <!-- ÁREA LATERAL ESQUERDA (ANÚNCIO)                         -->
+        <!-- ======================================================= -->
+        <aside class="anuncio-lateral">
+            <!-- Quando tiver o código do anúncio (Display Ad), apague o texto abaixo e cole o código aqui -->
+            ESPAÇO PUBLICITÁRIO<br>(Google Ads)
+        </aside>
 
         <main>
             
@@ -337,40 +340,36 @@
 
             </div>
 
-            <!-- === PÁGINA 4: SOBRE & APOIO === -->
+            <!-- === PÁGINA 4: SOBRE (LIMPO) === -->
             <div id="pag-sobre" class="pagina">
                 <h2>Sobre o Projeto</h2>
                 
                 <!-- Nota do Autor -->
                 <div class="autor-nota">
-                    <p><strong>Olá! 👋 Esta é a minha primeira criação.</strong></p>
+                    <p><strong>Olá! 👋</strong></p>
                     <p>Sou estudante de <strong>Química Industrial (2º Período)</strong> e desenvolvi este site para me ajudar nos estudos e facilitar a vida de outros colegas, técnicos e professores.</p>
-                    <p>Meu objetivo é democratizar o conhecimento e oferecer ferramentas rápidas e precisas, seguindo sempre os padrões da IUPAC.</p>
+                    <p>Meu objetivo é democratizar o conhecimento e oferecer ferramentas rápidas e precisas.</p>
                 </div>
                 
-                <p>O site é 100% gratuito e sempre será. Porém, se esta ferramenta foi útil para você e quiser contribuir com qualquer valor para ajudar a manter o projeto no ar (e pagar meu café durante as madrugadas de estudo), ficarei muito grato!</p>
-
-                <!-- Área do PIX -->
-                <div class="pix-container">
-                    <h3 style="color: #0056b3;">☕ Apoie o Desenvolvedor</h3>
-                    <p style="margin-top: 10px; font-size: 0.9rem; color: #555;">Escaneie o QR Code abaixo com o app do seu banco:</p>
-                    
-                    <!-- QR Code Gerado Automaticamente -->
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020101021126580014br.gov.bcb.pix0136918d20ee-def0-4986-b1c3-a8fb0165697d5204000053039865802BR5919SAMUEL C DOS SANTOS6008SAO LUIS62070503***630497DE" alt="QR Code Pix" class="pix-img">
+                <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 30px; border-left: 4px solid #28a745;">
+                    <h3 style="margin-bottom: 10px; color: #28a745; font-size: 1.2rem;">Compromisso com a Qualidade</h3>
+                    <p>✅ Interface otimizada para laboratório.</p>
+                    <p>✅ Responsivo para uso em Celular e Tablet.</p>
+                    <p>✅ Gratuito e acessível para todos.</p>
                     <br>
-                    
-                    <p style="margin-bottom: 10px; font-size: 0.9rem;">Ou copie a chave Pix (Copia e Cola):</p>
-                    
-                    <!-- Botão de Copiar -->
-                    <button class="btn-pix" onclick="copiarPix()">
-                        <span>📋</span> COPIAR CHAVE PIX
-                    </button>
-                    <p id="msg-copiado" style="display:none; color: green; margin-top: 10px; font-weight: bold;">✅ Código copiado com sucesso!</p>
+                    <p style="font-weight: bold;">⚠️ Todas as fórmulas e constantes utilizadas seguem estritamente o padrão da IUPAC (União Internacional de Química Pura e Aplicada).</p>
                 </div>
             </div>
 
         </main>
-        <aside class="anuncio-lateral">ESPAÇO PUBLICITÁRIO<br>(Google Ads)</aside>
+        
+        <!-- ======================================================= -->
+        <!-- ÁREA LATERAL DIREITA (ANÚNCIO)                          -->
+        <!-- ======================================================= -->
+        <aside class="anuncio-lateral">
+             <!-- Quando tiver o código do anúncio (Display Ad), apague o texto abaixo e cole o código aqui -->
+            ESPAÇO PUBLICITÁRIO<br>(Google Ads)
+        </aside>
     </div>
 
     <footer>
@@ -386,52 +385,6 @@
             document.getElementById('btn-' + aba).classList.add('ativo');
         }
         navegar('molaridade'); // Inicio
-
-        // --- FUNÇÃO DE COPIAR PIX (ATUALIZADA E ROBUSTA) ---
-        function copiarPix() {
-            const pixCode = "00020101021126580014br.gov.bcb.pix0136918d20ee-def0-4986-b1c3-a8fb0165697d5204000053039865802BR5919SAMUEL C DOS SANTOS6008SAO LUIS62070503***630497DE";
-            
-            function mostrarSucesso() {
-                let msg = document.getElementById('msg-copiado');
-                msg.style.display = 'block';
-                setTimeout(() => { msg.style.display = 'none'; }, 3000);
-            }
-
-            // Método 1: Tenta execCommand (Funciona em iframes/bloqueados)
-            try {
-                const textArea = document.createElement("textarea");
-                textArea.value = pixCode;
-                
-                // Esconde o elemento visualmente mas mantém no DOM
-                textArea.style.position = "fixed";
-                textArea.style.left = "-9999px";
-                textArea.style.top = "0";
-                
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                
-                const successful = document.execCommand('copy');
-                document.body.removeChild(textArea);
-                
-                if (successful) {
-                    mostrarSucesso();
-                    return;
-                }
-            } catch (err) {
-                console.error("Erro no método execCommand:", err);
-            }
-
-            // Método 2: Tenta API Clipboard (Moderna, mas pode falhar em iframe)
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(pixCode).then(mostrarSucesso).catch(err => {
-                    console.error('Erro na API Clipboard: ', err);
-                    prompt("Copie o código manualmente:", pixCode);
-                });
-            } else {
-                prompt("Copie o código manualmente:", pixCode);
-            }
-        }
 
         // --- CONVERSORES ---
         function converterTemp(origem) {
