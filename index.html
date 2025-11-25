@@ -49,10 +49,10 @@
         .legenda-item { margin: 0 10px; font-size: 0.9rem; color: #856404; }
         .legenda-item strong { font-size: 1.2rem; font-family: 'Times New Roman', Times, serif; margin-right: 5px; }
         
-        /* Box de Conversão */
+        /* Box de Conversão e Estequiometria */
         .converter-box { background-color: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; margin-bottom: 30px; }
         .converter-title { font-size: 1.2rem; font-weight: bold; color: #0056b3; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-
+        
         /* --- SLATER --- */
         .config-eletronica { font-family: 'Courier New', Courier, monospace; background: #222; color: #0f0; padding: 15px; border-radius: 5px; text-align: center; font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 1px; word-wrap: break-word; }
         .slater-steps { text-align: left; background: #fff; padding: 15px; border-left: 4px solid #0056b3; margin-top: 15px; font-size: 0.95rem; line-height: 1.6; }
@@ -68,45 +68,14 @@
         .cell-sym { font-weight: bold; font-size: 1.1rem; color: #000; }
         .cell-name { font-size: 0.55rem; color: #444; text-align: center; overflow: hidden; white-space: nowrap; width: 90%; text-overflow: ellipsis; }
         
-        /* Cores das Famílias (ATUALIZADO PARA CORES DISTINTAS) */
-        .cat-nao-metal { background-color: #a2f2a6; } /* Verde Claro */
-        .cat-gas-nobre { background-color: #99ddff; } /* Azul Céu */
-        .cat-metal-alcalino { background-color: #ff9999; } /* Vermelho/Salmão */
-        .cat-metal-alcalino-terroso { background-color: #ffdead; } /* Laranja Claro */
-        .cat-semimetal { background-color: #8fbc8f; } /* Verde Musgo */
-        .cat-halogenio { background-color: #e0b0ff; } /* Roxo/Lilás */
-        .cat-metal-transicao { background-color: #ffc0c0; } /* Rosa Claro */
-        .cat-lantanideo { background-color: #ffbfff; } /* Rosa Choque */
-        .cat-actinideo { background-color: #ff99cc; } /* Rosa Mais Escuro */
-        .cat-metal-representativo { background-color: #cccccc; } /* Cinza */
+        /* Cores das Famílias */
+        .cat-nao-metal { background-color: #a2f2a6; } .cat-gas-nobre { background-color: #99ddff; } .cat-metal-alcalino { background-color: #ff9999; } .cat-metal-alcalino-terroso { background-color: #ffdead; } .cat-semimetal { background-color: #8fbc8f; } .cat-halogenio { background-color: #e0b0ff; } .cat-metal-transicao { background-color: #ffc0c0; } .cat-lantanideo { background-color: #ffbfff; } .cat-actinideo { background-color: #ff99cc; } .cat-metal-representativo { background-color: #cccccc; }
 
-        /* LEGENDA DA TABELA */
-        .legenda-tabela {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 15px;
-            justify-content: center;
-            padding: 10px;
-            background: #f9f9f9;
-            border-radius: 8px;
-        }
-        .legenda-item {
-            display: flex;
-            align-items: center;
-            font-size: 0.8rem;
-            margin-right: 10px;
-        }
-        .legenda-box {
-            width: 15px;
-            height: 15px;
-            display: inline-block;
-            margin-right: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
+        .legenda-tabela { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; justify-content: center; padding: 10px; background: #f9f9f9; border-radius: 8px; }
+        .legenda-item { display: flex; align-items: center; font-size: 0.8rem; margin-right: 10px; }
+        .legenda-box { width: 15px; height: 15px; display: inline-block; margin-right: 5px; border: 1px solid #ccc; border-radius: 3px; }
 
-        /* Modal de Detalhes */
+        /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; animation: slideDown 0.3s; }
         .btn-close-modal { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666; }
@@ -126,9 +95,10 @@
 
     <nav>
         <a id="btn-molaridade" onclick="navegar('molaridade')">Molaridade</a>
+        <a id="btn-estequiometria" onclick="navegar('estequiometria')">Massa Molar / Soluções</a>
         <a id="btn-diluicao" onclick="navegar('diluicao')">Diluição</a>
         <a id="btn-slater" onclick="navegar('slater')">Blindagem</a>
-        <a id="btn-tabela" onclick="navegar('tabela')">Tabela Periódica</a>
+        <a id="btn-tabela" onclick="navegar('tabela')">Tabela</a>
         <a id="btn-conversor" onclick="navegar('conversor')">Conversor</a>
         <a id="btn-sobre" onclick="navegar('sobre')">Sobre</a>
     </nav>
@@ -177,6 +147,49 @@
                 </div>
                 <button class="btn-calcular" onclick="calcUniversal()">CALCULAR AGORA</button>
                 <div id="resMolaridade" class="resultado-box"></div>
+            </div>
+
+            <!-- === PÁGINA NOVA: MASSA MOLAR (Antiga Estequiometria) === -->
+            <div id="pag-estequiometria" class="pagina">
+                <h2>Ferramentas de Soluções</h2>
+                <p style="margin-bottom: 20px; color: #666;">Cálculo de Massa Molar e Conversão de Rótulos Comerciais.</p>
+
+                <!-- FERRAMENTA 1: CALCULADORA MM -->
+                <div class="converter-box" style="border-color: #0056b3; background-color: #f0f7ff;">
+                    <div class="converter-title">🧪 Calculadora de Massa Molar (MM)</div>
+                    <p style="font-size:0.9rem; margin-bottom:10px;">Digite a fórmula (Ex: <strong>H2SO4</strong>, <strong>Ca(OH)2</strong>). Atenção: use letras maiúsculas corretamente (CO2, não co2).</p>
+                    
+                    <div class="input-group">
+                        <input type="text" id="mm_formula" placeholder="Ex: C6H12O6" style="font-size: 1.2rem; letter-spacing: 1px;">
+                    </div>
+                    <button class="btn-calcular" onclick="calcularMassaMolarExata()">CALCULAR MM</button>
+                    
+                    <div id="resMM" class="resultado-box" style="text-align: left; display:none;"></div>
+                </div>
+
+                <!-- FERRAMENTA 2: CONCENTRAÇÃO DE RÓTULO (NOVO) -->
+                <div class="converter-box" style="border-color: #28a745; background-color: #f4fff6;">
+                    <div class="converter-title" style="color:#155724">🏷️ Converter Rótulo em Molaridade</div>
+                    <p style="font-size:0.9rem; margin-bottom:10px;">Use para ácidos e reagentes líquidos puros (Ex: HCl 37%, HNO3 70%).</p>
+                    
+                    <div class="row">
+                        <div class="col">
+                            <label>Pureza / Título (%):</label>
+                            <input type="number" id="conc_porcentagem" placeholder="Ex: 70" step="0.1">
+                        </div>
+                        <div class="col">
+                            <label>Densidade (g/mL):</label>
+                            <input type="number" id="conc_densidade" placeholder="Ex: 1.41" step="0.01">
+                        </div>
+                    </div>
+                    <div class="input-group" style="margin-top:10px;">
+                        <label>Massa Molar (MM):</label>
+                        <input type="number" id="conc_mm" placeholder="Ex: 63.02 (HNO3)" step="0.01">
+                    </div>
+                    
+                    <button class="btn-calcular" style="background-color:#28a745" onclick="calcularConcentracaoRotulo()">CALCULAR MOLARIDADE REAL</button>
+                    <div id="resConcentracao" class="resultado-box" style="background-color:#d4edda; color:#155724; border-color:#c3e6cb; display:none;"></div>
+                </div>
             </div>
 
             <!-- === PÁGINA 2: DILUIÇÃO === -->
@@ -239,8 +252,6 @@
             <div id="pag-tabela" class="pagina">
                 <h2>Tabela Periódica Interativa</h2>
                 <p style="margin-bottom: 10px; color: #666;">Clique em qualquer elemento para ver suas curiosidades.</p>
-                
-                <!-- LEGENDA DAS CORES -->
                 <div class="legenda-tabela">
                     <div class="legenda-item"><span class="legenda-box cat-nao-metal"></span>Não-Metais</div>
                     <div class="legenda-item"><span class="legenda-box cat-metal-alcalino"></span>Alc.</div>
@@ -253,17 +264,14 @@
                     <div class="legenda-item"><span class="legenda-box cat-lantanideo"></span>Lantanídeos</div>
                     <div class="legenda-item"><span class="legenda-box cat-actinideo"></span>Actinídeos</div>
                 </div>
-
                 <div class="tabela-scroll">
                     <div id="grid-tabela" class="periodic-table"></div>
                 </div>
-
                 <div id="modal-elemento" class="modal-overlay" onclick="fecharModal(event)">
                     <div class="modal-content">
                         <button class="btn-close-modal" onclick="fecharModal(true)">×</button>
                         <h2 id="modal-titulo" style="border: none; color: #0056b3; margin-bottom: 5px;">Hidrogênio (H)</h2>
                         <p id="modal-cat" style="color: #666; font-style: italic; margin-bottom: 15px;">Não-Metal</p>
-                        
                         <div style="display: flex; gap: 15px; margin-bottom: 20px;">
                             <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; flex: 1; text-align: center;">
                                 <strong>Z</strong><br><span id="modal-z" style="font-size: 1.2rem;">1</span>
@@ -272,7 +280,6 @@
                                 <strong>Massa</strong><br><span id="modal-massa">1.008</span>
                             </div>
                         </div>
-
                         <div style="background: #e8f0fe; padding: 15px; border-radius: 8px; border-left: 5px solid #0056b3;">
                             <h4 style="margin-bottom: 5px;">💡 Curiosidade:</h4>
                             <p id="modal-curiosidade">...</p>
@@ -497,6 +504,16 @@
             if (db_elementos[z]) return db_elementos[z];
             return { z: z, s: '?', n: 'Desconhecido', m: '---', cat: 'cat-desconhecido', info: 'Dados não disponíveis.' };
         }
+        
+        // Função de Fallback para o resto da tabela (pra não quebrar a calculadora MM)
+        function getMassa(simbolo) {
+            let el = db_elementos.find(e => e && e.s === simbolo);
+            if (el) {
+                let m = el.m.toString().replace('(','').replace(')',''); // Limpa parênteses de radioativos
+                return parseFloat(m);
+            }
+            return 0;
+        }
 
         // ==========================================
         // === TABELA PERIÓDICA RENDERIZADOR ===
@@ -554,10 +571,91 @@
             }
         }
 
-        renderTabela();
+        // ==========================================
+        // === ESTEQUIOMETRIA: CALCULADORA MM ===
+        // ==========================================
+        function calcularMassaMolarExata() {
+            let formula = document.getElementById('mm_formula').value.trim();
+            if (!formula) { alert("Digite uma fórmula!"); return; }
+
+            let elementosMap = {};
+            
+            try {
+                while (formula.match(/\(([^()]+)\)(\d*)/)) {
+                    formula = formula.replace(/\(([^()]+)\)(\d*)/g, (match, group, qtd) => {
+                        let multiplier = qtd === "" ? 1 : parseInt(qtd);
+                        let expanded = "";
+                        let innerRegex = /([A-Z][a-z]?)(\d*)/g;
+                        let m;
+                        while ((m = innerRegex.exec(group)) !== null) {
+                            let elem = m[1];
+                            let count = m[2] === "" ? 1 : parseInt(m[2]);
+                            expanded += elem + (count * multiplier);
+                        }
+                        return expanded;
+                    });
+                }
+
+                let regex = /([A-Z][a-z]?)(\d*)/g;
+                let match;
+                while ((match = regex.exec(formula)) !== null) {
+                    let elem = match[1];
+                    let qtd = match[2] === "" ? 1 : parseInt(match[2]);
+                    if (elementosMap[elem]) elementosMap[elem] += qtd;
+                    else elementosMap[elem] = qtd;
+                }
+
+                let massaTotal = 0;
+                let detalhesHTML = "<ul style='list-style:none; padding:0;'>";
+                
+                for (let el in elementosMap) {
+                    let m = getMassa(el);
+                    if (m === 0) { 
+                        alert(`Elemento '${el}' não encontrado no banco de dados.`); 
+                        return; 
+                    }
+                    let subtotal = m * elementosMap[el];
+                    massaTotal += subtotal;
+                    detalhesHTML += `<li><strong>${elementosMap[el]} x ${el}:</strong> ${subtotal.toFixed(3)} g/mol</li>`;
+                }
+                detalhesHTML += "</ul>";
+
+                let div = document.getElementById('resMM');
+                div.style.display = 'block';
+                div.innerHTML = `
+                    <h3>Massa Molar: <span style="color:#0056b3; font-size:1.5rem;">${massaTotal.toFixed(3)} g/mol</span></h3>
+                    <hr>
+                    ${detalhesHTML}
+                `;
+
+            } catch (e) {
+                alert("Fórmula inválida. Use o formato Ca(OH)2");
+            }
+        }
 
         // ==========================================
-        // === CÓDIGOS ANTERIORES (MANTIDOS) ===
+        // === CÁLCULO DE CONCENTRAÇÃO DE RÓTULO (NOVO) ===
+        // ==========================================
+        function calcularConcentracaoRotulo() {
+            let p = parseFloat(document.getElementById('conc_porcentagem').value);
+            let d = parseFloat(document.getElementById('conc_densidade').value);
+            let mm = parseFloat(document.getElementById('conc_mm').value);
+            
+            if (isNaN(p) || isNaN(d) || isNaN(mm)) {
+                alert("Preencha todos os campos!");
+                return;
+            }
+
+            // Fórmula: M = (10 * % * d) / MM
+            let molaridade = (10 * p * d) / mm;
+            
+            let div = document.getElementById('resConcentracao');
+            div.style.display = 'block';
+            div.innerHTML = `Molaridade Real:<br><strong style="font-size:1.5rem;">${molaridade.toFixed(4)} mol/L</strong>`;
+        }
+
+        // ==========================================
+        // === CÓDIGOS ANTERIORES (SLATER, CONVERSOR) ===
         // ==========================================
         let configGlobal = []; let subcamadasGlobal = [];
         function gerarConfiguracao() {
@@ -616,8 +714,8 @@
         function calcUniversal(){let t=document.getElementById('tipoCalculo').value,M=parseFloat(document.getElementById('flex_M').value),m=parseFloat(document.getElementById('flex_m').value),MM=parseFloat(document.getElementById('flex_MM').value),V=parseFloat(document.getElementById('flex_V').value),resDiv=document.getElementById('resMolaridade'),res=0,unid="";if(t==='acharMolaridade'){res=m/(MM*(V/1e3));unid="mol/L"}else if(t==='acharMassa'){res=M*MM*(V/1e3);unid="g"}else if(t==='acharVolume'){res=(m/(M*MM))*1e3;unid="ml"}else if(t==='acharMM'){res=m/(M*(V/1e3));unid="g/mol"}if(isNaN(res)||!isFinite(res))return alert("Preencha os campos!");resDiv.style.display='block';resDiv.innerHTML="Resultado: <br><strong style='font-size:1.5rem'>"+res.toFixed(4)+" "+unid+"</strong>"}
         function calcDiluicao(){let c1=parseFloat(document.getElementById('d_c1').value),v1=parseFloat(document.getElementById('d_v1').value),c2=parseFloat(document.getElementById('d_c2').value),v2=parseFloat(document.getElementById('d_v2').value),resDiv=document.getElementById('resDiluicao'),res=0,txt="";if(!document.getElementById('d_c1').value){res=(c2*v2)/v1;txt="Concentração Inicial (C1)"}else if(!document.getElementById('d_v1').value){res=(c2*v2)/c1;txt="Volume Inicial (V1)"}else if(!document.getElementById('d_c2').value){res=(c1*v1)/v2;txt="Concentração Final (C2)"}else if(!document.getElementById('d_v2').value){res=(c1*v1)/c2;txt="Volume Final (V2)"}else return alert("Deixe UM campo vazio!");if(isNaN(res)||!isFinite(res))return alert("Erro nos valores.");resDiv.style.display='block';resDiv.innerHTML=txt+": <br><strong style='font-size:1.5rem'>"+res.toFixed(2)+"</strong>"}
         
-        atualizarCamposMolaridade(); // Inicia correto
+        renderTabela(); // Inicia Tabela
+        atualizarCamposMolaridade(); // Inicia Molaridade
     </script>
 </body>
 </html>
-
